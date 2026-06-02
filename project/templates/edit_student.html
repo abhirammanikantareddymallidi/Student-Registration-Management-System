@@ -1,0 +1,290 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-primary-red text-white py-3">
+                    <h5 class="mb-0 fw-bold"><i class="fas fa-edit me-2"></i>Edit Student Record: {{ student.student_name }}</h5>
+                </div>
+                <div class="card-body p-4 bg-white">
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="row mb-4">
+                            {% if not is_mentor %}
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Student ID</label>
+                                {{ form.student_id }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Student Name</label>
+                                {{ form.student_name }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Department</label>
+                                {{ form.department }}
+                                {% if form.department.errors %}<div class="text-danger small">{{ form.department.errors }}</div>{% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Specialization</label>
+                                {{ form.specialization }}
+                                {% if form.specialization.errors %}<div class="text-danger small">{{ form.specialization.errors }}</div>{% endif %}
+                            </div>
+                            
+                            <h6 class="fw-bold text-primary-red mt-3 mb-3"><i class="fas fa-user-tie me-2"></i>Mentor Information</h6>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Mentor Name</label>
+                                {{ form.mentor_name }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Mentor ID</label>
+                                {{ form.mentor_id }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Mentor Email</label>
+                                {{ form.mentor_email }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Mentor Phone</label>
+                                {{ form.mentor_phone }}
+                            </div>
+                            {% else %}
+                            <div class="col-md-12 mb-4 p-3 bg-light rounded border-start border-4 border-primary-red">
+                                <h6 class="fw-bold mb-2">Student Information (Read-only)</h6>
+                                <div class="row">
+                                    <div class="col-md-4"><p class="mb-1 small text-muted">Name</p><p class="fw-bold">{{ student.student_name }}</p></div>
+                                    <div class="col-md-4"><p class="mb-1 small text-muted">ID</p><p class="fw-bold">{{ student.student_id }}</p></div>
+                                    <div class="col-md-4">
+                                        <p class="mb-1 small text-muted">Assigned Mentor</p>
+                                        <p class="fw-bold text-primary-red">{{ student.mentor_name }}</p>
+                                    </div>
+                                </div>
+                                <div style="display:none;">{{ form.as_p }}</div>
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h6 class="fw-bold text-primary-red mb-0"><i class="fas fa-list-ul me-2"></i>Subject Enrollments</h6>
+                            {% if not is_mentor %}
+                            <button type="button" class="btn btn-sm btn-outline-primary" id="add-subject-row">
+                                <i class="fas fa-plus me-1"></i> Add Subject Row
+                            </button>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="table-responsive mb-4">
+                            <table class="table table-bordered align-middle" id="subject-table">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Subject ID</th>
+                                        <th>Subject Name</th>
+                                        <th width="15%">Cluster-1</th>
+                                        <th width="15%">Cluster-2</th>
+                                        <th>Bucket</th>
+                                        <th class="text-center">Course Completed</th>
+                                        <th class="text-center">Course Not Completed</th>
+                                        {% if not is_mentor %}
+                                        <th class="text-center">Action</th>
+                                        {% endif %}
+                                    </tr>
+                                </thead>
+                                <tbody id="subject-rows">
+                                    {% for subject in student.subjects.all %}
+                                    <tr class="subject-row">
+                                        <td>
+                                            {% if is_mentor %}
+                                                <input type="text" value="{{ subject.subject_id }}" readonly class="form-control-plaintext">
+                                                <input type="hidden" name="subject_id[]" value="{{ subject.subject_id }}">
+                                            {% else %}
+                                                <input type="text" name="subject_id[]" class="form-control" value="{{ subject.subject_id }}" required>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if is_mentor %}
+                                                <input type="text" value="{{ subject.subject_name }}" readonly class="form-control-plaintext">
+                                                <input type="hidden" name="subject_name[]" value="{{ subject.subject_name }}">
+                                            {% else %}
+                                                <input type="text" name="subject_name[]" class="form-control" value="{{ subject.subject_name }}" required>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if is_mentor %}
+                                                {% if subject.cluster1_start and subject.cluster1_end %}
+                                                    {{ subject.cluster1_start }}–{{ subject.cluster1_end }}
+                                                {% else %}
+                                                    -
+                                                {% endif %}
+                                                <input type="hidden" name="cluster1_start[]" value="{{ subject.cluster1_start|default:0 }}">
+                                                <input type="hidden" name="cluster1_end[]" value="{{ subject.cluster1_end|default:0 }}">
+                                            {% else %}
+                                                <div class="input-group input-group-sm flex-nowrap">
+                                                    <input type="number" name="cluster1_start[]" class="form-control" value="{{ subject.cluster1_start|default:'' }}" placeholder="Start">
+                                                    <span class="input-group-text bg-light">–</span>
+                                                    <input type="number" name="cluster1_end[]" class="form-control" value="{{ subject.cluster1_end|default:'' }}" placeholder="End">
+                                                </div>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if is_mentor %}
+                                                {% if subject.cluster2_start and subject.cluster2_end %}
+                                                    {{ subject.cluster2_start }}–{{ subject.cluster2_end }}
+                                                {% else %}
+                                                    -
+                                                {% endif %}
+                                                <input type="hidden" name="cluster2_start[]" value="{{ subject.cluster2_start|default:0 }}">
+                                                <input type="hidden" name="cluster2_end[]" value="{{ subject.cluster2_end|default:0 }}">
+                                            {% else %}
+                                                <div class="input-group input-group-sm flex-nowrap">
+                                                    <input type="number" name="cluster2_start[]" class="form-control" value="{{ subject.cluster2_start|default:'' }}" placeholder="Start">
+                                                    <span class="input-group-text bg-light">–</span>
+                                                    <input type="number" name="cluster2_end[]" class="form-control" value="{{ subject.cluster2_end|default:'' }}" placeholder="End">
+                                                </div>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            <select name="bucket[]" class="form-control" {% if is_mentor %}disabled{% endif %}>
+                                                <option value="">Select Bucket</option>
+                                                <option value="C0" {% if subject.bucket == 'C0' %}selected{% endif %}>C0</option>
+                                                <option value="C1" {% if subject.bucket == 'C1' %}selected{% endif %}>C1</option>
+                                                <option value="C2" {% if subject.bucket == 'C2' %}selected{% endif %}>C2</option>
+                                                <option value="C3" {% if subject.bucket == 'C3' %}selected{% endif %}>C3</option>
+                                                <option value="C4" {% if subject.bucket == 'C4' %}selected{% endif %}>C4</option>
+                                                <option value="C5" {% if subject.bucket == 'C5' %}selected{% endif %}>C5</option>
+                                                <option value="C6" {% if subject.bucket == 'C6' %}selected{% endif %}>C6</option>
+                                                <option value="C7" {% if subject.bucket == 'C7' %}selected{% endif %}>C7</option>
+                                                <option value="C8" {% if subject.bucket == 'C8' %}selected{% endif %}>C8</option>
+                                                <option value="C9" {% if subject.bucket == 'C9' %}selected{% endif %}>C9</option>
+                                            </select>
+                                            {% if is_mentor %}
+                                                <input type="hidden" name="bucket[]" value="{{ subject.bucket }}">
+                                            {% endif %}
+                                        </td>
+                                        <td class="text-center">
+                                            <input type="checkbox" name="course_completed[]" value="{{ forloop.counter0 }}" class="form-check-input completion-check" {% if subject.course_completed %}checked{% endif %} {% if is_mentor %}{% endif %}>
+                                        </td>
+                                        <td class="text-center">
+                                            <input type="checkbox" name="course_not_completed[]" value="{{ forloop.counter0 }}" class="form-check-input uncompletion-check" {% if not subject.course_completed %}checked{% endif %} {% if is_mentor %}{% endif %}>
+                                        </td>
+                                        {% if not is_mentor %}
+                                        <td class="text-center">
+                                            <button type="button" class="btn btn-sm btn-outline-danger border-0 remove-row">
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                        </td>
+                                        {% endif %}
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="d-flex justify-content-end gap-2 border-top pt-4">
+                            {% if not is_mentor %}
+                            <a href="{% url 'admin_dashboard' %}" class="btn btn-light px-4">Cancel</a>
+                            {% else %}
+                            <a href="{% url 'mentor_dashboard' %}" class="btn btn-light px-4">Cancel</a>
+                            {% endif %}
+                            <button type="submit" class="btn btn-primary-red px-5 shadow-sm fw-bold">Update Record</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if not is_mentor %}
+<script>
+const bucketDropdownHTML = `
+    <td>
+        <select name="bucket[]" class="form-control">
+            <option value="">Select Bucket</option>
+            <option value="C0">C0</option>
+            <option value="C1">C1</option>
+            <option value="C2">C2</option>
+            <option value="C3">C3</option>
+            <option value="C4">C4</option>
+            <option value="C5">C5</option>
+            <option value="C6">C6</option>
+            <option value="C7">C7</option>
+            <option value="C8">C8</option>
+            <option value="C9">C9</option>
+        </select>
+    </td>
+`;
+
+document.getElementById('add-subject-row').addEventListener('click', function() {
+    const tbody = document.getElementById('subject-rows');
+    const rowCount = document.querySelectorAll('.subject-row').length;
+    const newRow = document.createElement('tr');
+    newRow.className = 'subject-row';
+    newRow.innerHTML = `
+        <td><input type="text" name="subject_id[]" class="form-control" placeholder="ID" required></td>
+        <td><input type="text" name="subject_name[]" class="form-control" placeholder="Name" required></td>
+        <td>
+            <div class="input-group input-group-sm flex-nowrap">
+                <input type="number" name="cluster1_start[]" class="form-control" placeholder="S">
+                <span class="input-group-text bg-light">–</span>
+                <input type="number" name="cluster1_end[]" class="form-control" placeholder="E">
+            </div>
+        </td>
+        <td>
+            <div class="input-group input-group-sm flex-nowrap">
+                <input type="number" name="cluster2_start[]" class="form-control" placeholder="S">
+                <span class="input-group-text bg-light">–</span>
+                <input type="number" name="cluster2_end[]" class="form-control" placeholder="E">
+            </div>
+        </td>
+        ${bucketDropdownHTML}
+        <td class="text-center">
+            <input type="checkbox" name="course_completed[]" value="${rowCount}" class="form-check-input completion-check">
+        </td>
+        <td class="text-center">
+            <input type="checkbox" name="course_not_completed[]" value="${rowCount}" class="form-check-input uncompletion-check" checked>
+        </td>
+        <td class="text-center">
+            <button type="button" class="btn btn-sm btn-outline-danger border-0 remove-row">
+                <i class="fas fa-times"></i>
+            </button>
+        </td>
+    `;
+    tbody.appendChild(newRow);
+});
+
+document.addEventListener('change', function(e) {
+    if (e.target.classList.contains('completion-check')) {
+        const row = e.target.closest('tr');
+        const other = row.querySelector('.uncompletion-check');
+        if (e.target.checked) other.checked = false;
+    }
+    if (e.target.classList.contains('uncompletion-check')) {
+        const row = e.target.closest('tr');
+        const other = row.querySelector('.completion-check');
+        if (e.target.checked) other.checked = false;
+    }
+});
+
+document.addEventListener('click', function(e) {
+    if (e.target.classList.contains('remove-row') || e.target.parentElement.classList.contains('remove-row')) {
+        const row = e.target.closest('tr');
+        if (document.querySelectorAll('.subject-row').length > 1) {
+            row.remove();
+            // Re-index checkboxes
+            document.querySelectorAll('input[name="course_completed[]"]').forEach((cb, index) => {
+                cb.value = index;
+            });
+            document.querySelectorAll('input[name="course_not_completed[]"]').forEach((cb, index) => {
+                cb.value = index;
+            });
+        } else {
+            alert('At least one subject is required.');
+        }
+    }
+});
+</script>
+{% endif %}
+
+{% endblock %}

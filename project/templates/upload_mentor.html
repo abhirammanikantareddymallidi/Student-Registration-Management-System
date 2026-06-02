@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-primary-red text-white py-3">
+                    <h5 class="mb-0 fw-bold"><i class="fas fa-file-excel me-2"></i>Upload Excel File</h5>
+                </div>
+                <div class="card-body p-4">
+                    <div class="alert alert-info border-0 shadow-sm mb-4">
+                        <small>
+                            <i class="fas fa-info-circle me-1"></i> <strong>Note:</strong> The Excel file (<code>list.xlsx</code>) should contain:
+                            <ul class="mb-0 mt-2">
+                                <li><code>Reg.No</code> (matches Student ID)</li>
+                                <li><code>NAME OF THE COUNSELOR</code></li>
+                                <li><code>EMP ID</code> (Mentor ID)</li>
+                                <li><code>Counsellor Email</code></li>
+                                <li><code>Consellor Contact number</code> (optional)</li>
+                            </ul>
+                        </small>
+                    </div>
+                    
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Select mentor.xlsx File</label>
+                            {{ form.excel_file }}
+                            {% if form.excel_file.errors %}
+                                <div class="text-danger mt-1 small">{{ form.excel_file.errors }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="d-flex justify-content-end gap-2">
+                            <a href="{% url 'admin_dashboard' %}" class="btn btn-light px-4">Cancel</a>
+                            <button type="submit" class="btn btn-primary-red px-5 shadow-sm fw-bold">Upload and Sync</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

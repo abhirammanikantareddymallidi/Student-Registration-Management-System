@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10 col-xl-8">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-dark text-white py-3">
+                    <h5 class="mb-0 fw-bold"><i class="fas fa-list-ul me-2"></i>Upload Subject Master Excel</h5>
+                </div>
+                <div class="card-body p-4">
+
+                    <div class="card shadow-sm mb-4">
+                        <div class="card-header bg-success text-white">
+                            📄 Subject Excel Format
+                        </div>
+                        <div class="card-body">
+                            <p class="text-muted">Make sure your Excel file follows this format:</p>
+                            <div class="table-responsive">
+                                <table class="table table-bordered text-center mb-0">
+                                    <thead class="table-success">
+                                        <tr>
+                                            <th>Subject ID</th>
+                                            <th>Subject Name</th>
+                                            <th>Department</th>
+                                            <th>specialization</th>
+                                            <th>Cluster Start</th>
+                                            <th>Cluster End</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <form method="POST" enctype="multipart/form-data" action="{% url 'upload_subject_excel' %}">
+                        {% csrf_token %}
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Select Subject Master Excel File</label>
+                            <input type="file" name="file" class="form-control" accept=".xlsx" required>
+                        </div>
+                        
+                        <div class="d-flex justify-content-end gap-2">
+                            <a href="{% url 'admin_dashboard' %}" class="btn btn-light px-4">Cancel</a>
+                            <button type="submit" class="btn btn-dark px-5 shadow-sm fw-bold">Upload</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

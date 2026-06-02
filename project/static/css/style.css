@@ -1,0 +1,345 @@
+/* ======================================================================
+   ECE BRANCH GREEN THEME — Complete Override
+   All red colors replaced with green palette:
+   Main:  #0f6b3c
+   Dark:  #0b4f2c
+   Light: #1c8a4a
+   ====================================================================== */
+
+:root {
+    --primary-green: #0f6b3c;
+    --dark-green: #0b4f2c;
+    --light-green: #1c8a4a;
+    --custom-light: #f5faf7;
+    --dark-text: #1a2e25;
+    /* Backward compatibility — old variable names point to green */
+    --primary-red: #0f6b3c;
+    --secondary-red: #0b4f2c;
+}
+
+body {
+    background-color: var(--custom-light);
+    font-family: 'Roboto', sans-serif;
+    color: var(--dark-text);
+    min-height: 100vh;
+}
+
+/* ===================== NAVBAR / HEADER ===================== */
+
+body .main-header,
+body .portal-header,
+body .header-bar,
+body .navbar {
+    background-color: #0f6b3c !important;
+    color: white !important;
+}
+
+body .main-header {
+    padding: 15px 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.header-title-main {
+    font-size: 1.4rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.header-title-sub {
+    font-size: 1rem;
+    font-weight: 400;
+    opacity: 0.9;
+}
+
+.header-title-dept {
+    font-size: 0.85rem;
+    font-weight: 300;
+    opacity: 0.8;
+}
+
+/* ===================== CUSTOM CLASSES ===================== */
+
+body .bg-primary-red {
+    background-color: #0f6b3c !important;
+}
+
+/* Light background variant for icon circles */
+body .bg-primary-red-light {
+    background-color: #e8f5ee !important;
+}
+
+body .text-primary-red {
+    color: #0f6b3c !important;
+}
+
+/* Solid button */
+body .btn-primary-red {
+    background-color: #0f6b3c !important;
+    border-color: #0f6b3c !important;
+    color: white !important;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+body .btn-primary-red:hover,
+body .btn-primary-red:focus,
+body .btn-primary-red:active {
+    background-color: #0b4f2c !important;
+    border-color: #0b4f2c !important;
+    color: white !important;
+}
+
+/* Outline button */
+body .btn-outline-primary-red {
+    color: #0f6b3c !important;
+    border-color: #0f6b3c !important;
+    background-color: transparent !important;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+body .btn-outline-primary-red:hover,
+body .btn-outline-primary-red:focus,
+body .btn-outline-primary-red:active {
+    background-color: #0f6b3c !important;
+    border-color: #0f6b3c !important;
+    color: white !important;
+}
+
+/* Border accent */
+body .border-primary-red {
+    border-color: #0f6b3c !important;
+}
+
+/* ===================== BOOTSTRAP BUTTON OVERRIDES ===================== */
+
+body .btn-primary {
+    background-color: #1c8a4a !important;
+    border-color: #1c8a4a !important;
+    color: white !important;
+}
+
+body .btn-primary:hover,
+body .btn-primary:focus,
+body .btn-primary:active {
+    background-color: #0b4f2c !important;
+    border-color: #0b4f2c !important;
+    color: white !important;
+}
+
+body .btn-outline-primary {
+    color: #0f6b3c !important;
+    border-color: #0f6b3c !important;
+}
+
+body .btn-outline-primary:hover,
+body .btn-outline-primary:focus,
+body .btn-outline-primary:active {
+    background-color: #0f6b3c !important;
+    border-color: #0f6b3c !important;
+    color: white !important;
+}
+
+/* ===================== CARD HEADERS ===================== */
+
+/* Default card-header → green */
+body .card-header {
+    background-color: #0f6b3c !important;
+    color: white !important;
+}
+
+/* Allow explicit bg-white on card-header (admin dashboard search area) */
+body .card-header.bg-white {
+    background-color: #ffffff !important;
+    color: var(--dark-text) !important;
+}
+
+body .card-header .btn-outline-light {
+    border-color: rgba(255, 255, 255, 0.6) !important;
+}
+
+/* ===================== BUCKET CARDS ===================== */
+
+body .bucket-card {
+    border-radius: 12px;
+    border: 2px solid #0f6b3c !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    margin-bottom: 25px;
+    overflow: hidden;
+}
+
+body .bucket-card-header,
+body .bucket-header,
+body .bucket-title {
+    background-color: #0f6b3c !important;
+    color: white !important;
+    padding: 12px 20px;
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+/* ===================== TABLE STYLES ===================== */
+
+body .kl-table {
+    margin-bottom: 0;
+}
+
+body .kl-table thead th {
+    background-color: #e8f5ee !important;
+    color: #1a3d2b !important;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    padding: 12px 20px;
+    border-bottom: 2px solid #b3d9c4;
+}
+
+body .kl-table tbody td {
+    padding: 15px 20px;
+    vertical-align: middle;
+}
+
+/* Generic Bootstrap table headers */
+body .table thead th {
+    background-color: #0f6b3c !important;
+    color: white !important;
+}
+
+/* ===================== COMPONENT STYLES ===================== */
+
+body .course-code {
+    font-weight: 700;
+    color: #0f6b3c !important;
+}
+
+.credits-badge {
+    background-color: #d4edda;
+    color: #155724;
+    font-size: 0.75rem;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-weight: 600;
+    margin-left: 8px;
+}
+
+.status-badge-completed {
+    background-color: #d4edda;
+    color: #155724;
+    font-weight: 700;
+    font-size: 0.75rem;
+    padding: 6px 12px;
+    border-radius: 4px;
+    display: inline-flex;
+    align-items: center;
+}
+
+.status-badge-pending {
+    background-color: #f8d7da;
+    color: #721c24;
+    font-weight: 700;
+    font-size: 0.75rem;
+    padding: 6px 12px;
+    border-radius: 4px;
+    display: inline-flex;
+    align-items: center;
+}
+
+.badge-dot {
+    height: 8px;
+    width: 8px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 6px;
+}
+
+.bg-dot-green {
+    background-color: #28a745;
+}
+
+.bg-dot-red {
+    background-color: #dc3545;
+}
+
+body .cluster-pill {
+    font-size: 0.8rem;
+    padding: 3px 12px;
+    margin: 2px;
+    font-weight: 500;
+    background-color: #e8f5ee !important;
+    color: #0f6b3c !important;
+    border-color: #b3d9c4 !important;
+}
+
+/* ===================== BADGES ===================== */
+
+body .badge.bg-primary-red {
+    background-color: #0f6b3c !important;
+    color: white !important;
+}
+
+/* ===================== BORDER ACCENTS ===================== */
+
+/* Inline border-left on summary cards */
+body .card[style*="border-left"] {
+    border-left-color: #0f6b3c !important;
+}
+
+/* ===================== ICON COLORS ===================== */
+
+body .icon-red {
+    color: #0f6b3c !important;
+}
+
+/* ===== ECE GREEN THEME ===== */
+
+:root {
+    --ece-green: #006b3c;
+    --ece-dark: #004d2b;
+    --ece-light: #1e8f4d;
+}
+
+/* Navbar background */
+.navbar,
+.portal-header,
+.header-bar {
+    background-color: var(--ece-green) !important;
+}
+
+/* Navbar text */
+.navbar .navbar-brand,
+.navbar .nav-link {
+    color: white !important;
+}
+
+/* Navbar hover */
+.navbar .nav-link:hover {
+    color: #c8ffd6 !important;
+}
+
+/* Dropdown menu */
+.dropdown-menu {
+    border: 1px solid var(--ece-green);
+}
+
+/* Card headers */
+.card-header,
+.bucket-header {
+    background-color: var(--ece-green) !important;
+    color: white !important;
+}
+
+/* Buttons */
+.btn-primary {
+    background-color: var(--ece-light) !important;
+    border-color: var(--ece-light) !important;
+}
+
+.btn-primary:hover {
+    background-color: var(--ece-dark) !important;
+}
+
+/* Table headers */
+.table thead th {
+    background-color: var(--ece-green) !important;
+    color: white !important;
+}

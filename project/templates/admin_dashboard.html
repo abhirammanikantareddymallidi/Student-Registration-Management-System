@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row mb-4 g-3">
+        <div class="col-md-6">
+            <div class="card summary-card p-3 shadow-sm h-100 hover-lift">
+                <div class="d-flex align-items-center">
+                    <div class="bg-primary-red-light p-3 rounded-3 me-3">
+                        <i class="fas fa-user-graduate text-primary-red fa-lg"></i>
+                    </div>
+                    <div>
+                        <small class="text-muted text-uppercase fw-bold d-block">Total Students</small>
+                        <h3 class="mb-0 fw-bold">{{ total_students }}</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card summary-card p-3 shadow-sm h-100 hover-lift" style="border-left: 5px solid #27ae60 !important;">
+                <div class="d-flex align-items-center">
+                    <div class="bg-success-light p-3 rounded-3 me-3">
+                        <i class="fas fa-chalkboard-teacher text-success fa-lg"></i>
+                    </div>
+                    <div>
+                        <small class="text-muted text-uppercase fw-bold d-block">Unique Mentors</small>
+                        <h3 class="mb-0 fw-bold" style="color: #27ae60;">{{ total_mentors }}</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-white py-3">
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+                <h5 class="mb-0 fw-bold text-primary-red">Student & Mentor Records</h5>
+                <div class="d-flex gap-2">
+                    <a href="{% url 'upload_student_page' %}" class="btn btn-sm btn-success px-3">
+                        <i class="fas fa-file-import me-1"></i> Upload Student
+                    </a>
+                    <a href="{% url 'upload_subject_page' %}" class="btn btn-sm btn-primary px-3">
+                        <i class="fas fa-list-ul me-1"></i> Upload Subject List
+                    </a>
+                    <a href="{% url 'upload_specialization_page' %}" class="btn btn-sm btn-warning px-3 text-dark">
+                        <i class="fas fa-project-diagram me-1"></i> Upload Specialization Excel
+                    </a>
+                    <div class="vr mx-1"></div>
+                    <a href="{% url 'add_student' %}" class="btn btn-sm btn-primary-red px-3">
+                        <i class="fas fa-plus-circle me-1"></i> Add Student
+                    </a>
+                </div>
+            </div>
+
+            <!-- Search Form -->
+            <form method="GET" class="border-top pt-3">
+                <div class="row g-2 align-items-center">
+                    <div class="col-md-4">
+                        <div class="input-group">
+                            <span class="input-group-text bg-white"><i class="fas fa-search text-muted"></i></span>
+                            <input type="text" name="search" class="form-control"
+                                placeholder="Search by ID, Name, or Mentor" value="{{ request.GET.search|default:'' }}">
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-primary-red w-100">Search</button>
+                    </div>
+                    {% if request.GET.search %}
+                    <div class="col-md-2">
+                        <a href="{% url 'admin_dashboard' %}" class="btn btn-light w-100">Clear</a>
+                    </div>
+                    {% endif %}
+                </div>
+            </form>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0 align-middle">
+                    <thead>
+                        <tr>
+                            <th class="ps-4">Student ID</th>
+                            <th>Student Name</th>
+                            <th>Department</th>
+                            <th>Mentor Name</th>
+                            <th>Mentor ID</th>
+                            <th>Mentor Email</th>
+                            <th>Mentor Phone</th>
+                            <th>Total Subjects</th>
+                            <th class="text-center">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for student in students %}
+                        <tr>
+                            <td class="ps-4 fw-bold">{{ student.student_id }}</td>
+                            <td>{{ student.student_name }}</td>
+                            <td>{{ student.department|default:"N/A" }}</td>
+                            <td>{{ student.mentor_name|default:"N/A" }}</td>
+                            <td><code class="small">{{ student.mentor_id|default:"N/A" }}</code></td>
+                            <td><small class="text-muted">{{ student.mentor_email|default:"N/A" }}</small></td>
+                            <td><small class="text-muted">{{ student.mentor_phone|default:"N/A" }}</small></td>
+                            <td class="text-center"><span class="badge bg-secondary rounded-pill">{{ student.subjects.count }}</span></td>
+                            <td class="text-center">
+                                <a href="{% url 'edit_student' student.student_id %}"
+                                    class="btn btn-sm btn-outline-primary border-0 me-1">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <a href="{% url 'delete_student' student.student_id %}"
+                                    class="btn btn-sm btn-outline-danger border-0"
+                                    onclick="return confirm('Delete this record?')">
+                                    <i class="fas fa-trash-alt"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="9" class="text-center py-5 text-muted">
+                                <i class="fas fa-users-slash fa-3x mb-3 opacity-25"></i>
+                                <p>No student records found.</p>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

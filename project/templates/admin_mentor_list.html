@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Header Summary Card -->
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card summary-card p-3 shadow-sm hover-lift" style="border-left: 5px solid var(--primary-red) !important;">
+                <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0 bg-primary-red-light p-3 rounded-circle me-3">
+                        <i class="fas fa-chalkboard-teacher text-primary-red fa-2x"></i>
+                    </div>
+                    <div>
+                        <small class="text-muted text-uppercase fw-bold">Total Mentors</small>
+                        <h3 class="mb-0 fw-bold">{{ total_mentors }}</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mentor List Section -->
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <h5 class="mb-0 fw-bold text-primary-red">Mentor Management</h5>
+            
+            <!-- Search Form -->
+            <form method="GET" class="d-flex gap-2">
+                <div class="input-group">
+                    <span class="input-group-text bg-white border-end-0"><i class="fas fa-search text-muted"></i></span>
+                    <input type="text" name="search" class="form-control border-start-0 ps-0" placeholder="Search ID, Name or Email" value="{{ request.GET.search|default:'' }}">
+                    <button type="submit" class="btn btn-primary-red px-3">Search</button>
+                </div>
+                {% if request.GET.search %}
+                <a href="{% url 'mentor_list' %}" class="btn btn-outline-secondary px-3">Clear</a>
+                {% endif %}
+            </form>
+        </div>
+        
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0 align-middle">
+                    <thead class="bg-light">
+                        <tr>
+                            <th class="ps-4">Mentor ID</th>
+                            <th>Mentor Name</th>
+                            <th>Email Address</th>
+                            <th>Phone Number</th>
+                            <th class="text-center">Students</th>
+                            <th class="text-center">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for mentor in mentors %}
+                        <tr>
+                            <td class="ps-4 fw-bold text-primary-red">{{ mentor.mentor_id }}</td>
+                            <td>{{ mentor.mentor_name }}</td>
+                            <td><small class="text-muted">{{ mentor.mentor_email }}</small></td>
+                            <td><small>{{ mentor.mentor_phone }}</small></td>
+                            <td class="text-center">
+                                <span class="badge bg-primary-red rounded-pill px-3">{{ mentor.student_count }}</span>
+                            </td>
+                            <td class="text-center">
+                                <a href="{% url 'change_mentor_password' mentor.mentor_id %}" class="btn btn-sm btn-outline-warning fw-bold px-3">
+                                    <i class="fas fa-key me-1"></i> Reset Password
+                                </a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="6" class="text-center py-5 text-muted">
+                                <i class="fas fa-user-slash fa-3x mb-3 opacity-25"></i>
+                                <p>No mentors found in the system records.</p>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

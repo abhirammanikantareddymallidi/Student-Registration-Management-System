@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="hero-section">
+    <div class="container h-100 d-flex flex-column justify-content-center align-items-center text-center">
+        
+        <div class="welcome-card card border-0 p-5 mt-4 mx-auto w-100 shadow-lg">
+            <div class="card-body py-4">
+                <div class="mb-4">
+                    <i class="fas fa-university fa-4x text-primary-red opacity-75"></i>
+                </div>
+                
+                <h1 class="welcome-title text-dark fw-bold mb-4">
+                    Welcome to B tech <br>
+                    Academic Registration Portal
+                </h1>
+                
+                <p class="welcome-text text-muted mx-auto mb-5 fs-5">
+                    This portal helps B.Tech students easily register their semester subjects; login to view your academic clusters.
+                </p>
+                
+                {% if not request.session.role %}
+                    <!-- Ensure button has type="button" and proper data-bs targets -->
+                    <button type="button" class="btn btn-primary-red btn-lg px-5 py-3 rounded-pill fw-bold shadow hover-lift" data-bs-toggle="modal" data-bs-target="#loginModal">
+                        Login to Continue <i class="fas fa-arrow-right ms-2"></i>
+                    </button>
+                {% else %}
+                    {% if request.session.role == 'admin' %}
+                        <a href="{% url 'admin_dashboard' %}" class="btn btn-primary-red btn-lg px-5 py-3 rounded-pill fw-bold shadow hover-lift">
+                            Return to Admin Dashboard <i class="fas fa-arrow-right ms-2"></i>
+                        </a>
+                    {% else %}
+                        <a href="{% url 'student_dashboard' %}" class="btn btn-primary-red btn-lg px-5 py-3 rounded-pill fw-bold shadow hover-lift">
+                            Return to Student Dashboard <i class="fas fa-arrow-right ms-2"></i>
+                        </a>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+        
+    </div>
+</div>
+{% endblock %}
